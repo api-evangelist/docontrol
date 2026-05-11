@@ -28,6 +28,24 @@ common:
     url: https://www.docontrol.io
   - type: Documentation
     url: https://docs.docontrol.io/
+  - type: Integrations
+    url: https://www.docontrol.io/integrations
+integrations:
+  - name: 'Google''s'
+  - name: 'Microsoft 365''s'
+  - name: 'Slack''s'
+  - name: 'Salesgorce''s'
+  - name: 'Box''s'
+  - name: 'Zoom''s'
+  - name: 'Github''s'
+  - name: 'Dropbox''s'
+  - name: 'Jira''s'
+  - name: 'Google Cloud''s'
+  - name: 'AWS Marketplace''s'
+  - name: AICPA SOC
+  - name: ISO
+  - name: GDPR Ready
+  - name: HIPAA Compliant
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
