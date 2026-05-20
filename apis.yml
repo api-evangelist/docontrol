@@ -24,6 +24,10 @@ apis:
       - type: Documentation
         url: https://docs.docontrol.io/
 common:
+  - type: GitHubOrganization
+    url: https://github.com/docontrol-io
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/do-control
   - type: Website
     url: https://www.docontrol.io
   - type: Documentation
