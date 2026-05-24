@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: DoControl API
+  description: >-
+    DoControl exposes a GraphQL API for its SaaS data security platform.
+    Authentication uses a short-lived access token obtained by exchanging a
+    refresh token (the API key issued from the DoControl admin panel) at the
+    auth endpoint. All GraphQL queries and mutations are sent as POST
+    requests to the gateway endpoint.
+  version: "4.0"
+servers:
+  - url: https://apollo-gateway-v4-api.prod.docontrol.io
+    description: DoControl GraphQL gateway
+  - url: https://auth.prod.docontrol.io
+    description: DoControl auth service
+security:
+  - bearerAuth: []
+tags:
+  - name: Authentication
+  - name: GraphQL
+paths:
+  /refresh:
+    post:
+      tags: [Authentication]
+      summary: Exchange refresh token for access token
+      description: >-
+        Exchange the API key (refresh token) for an access token that is
+        valid for approximately 5 minutes. Use the access token as a
+        Bearer token in subsequent GraphQL requests.
+      operationId: refreshToken
+      servers:
+        - url: https://auth.prod.docontrol.io
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+                  description: API key created in DoControl admin panel
+      responses:
+        '200':
+          description: Access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  expiresIn:
+                    type: integer
+  /graphql:
+    post:
+      tags: [GraphQL]
+      summary: Execute a GraphQL query or mutation
+      description: >-
+        Single GraphQL endpoint. Provide a query or mutation in the request
+        body. Requires admin permission and a Bearer access token.
+      operationId: graphql
+      servers:
+        - url: https://apollo-gateway-v4-api.prod.docontrol.io
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+                operationName:
+                  type: string
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Access token returned from /refresh
