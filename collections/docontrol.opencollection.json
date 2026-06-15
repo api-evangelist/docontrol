@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoControl API",
+    "version": "4.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Exchange refresh token for access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apollo-gateway-v4-api.prod.docontrol.io/refresh",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exchange the API key (refresh token) for an access token that is valid for approximately 5 minutes. Use the access token as a Bearer token in subsequent GraphQL requests."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "GraphQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a GraphQL query or mutation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://apollo-gateway-v4-api.prod.docontrol.io/graphql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Single GraphQL endpoint. Provide a query or mutation in the request body. Requires admin permission and a Bearer access token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
