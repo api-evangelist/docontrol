@@ -24,6 +24,12 @@ apis:
       - type: Documentation
         url: https://docs.docontrol.io/
 common:
+  - type: TrustCenter
+    url: security/docontrol-trust-center.yml
+  - type: DomainSecurity
+    url: security/docontrol-domain-security.yml
+  - type: Authentication
+    url: authentication/docontrol-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/docontrol-io
   - type: LinkedIn
