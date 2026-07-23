@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: DoControl Authentication GraphQL API
+  description: DoControl exposes a GraphQL API for its SaaS data security platform. Authentication uses a short-lived access token obtained by exchanging a refresh token (the API key issued from the DoControl admin panel) at the auth endpoint. All GraphQL queries and mutations are sent as POST requests to the gateway endpoint.
+  version: '4.0'
+servers:
+- url: https://apollo-gateway-v4-api.prod.docontrol.io
+  description: DoControl GraphQL gateway
+- url: https://auth.prod.docontrol.io
+  description: DoControl auth service
+security:
+- bearerAuth: []
+tags:
+- name: GraphQL
+paths:
+  /graphql:
+    post:
+      tags:
+      - GraphQL
+      summary: Execute a GraphQL query or mutation
+      description: Single GraphQL endpoint. Provide a query or mutation in the request body. Requires admin permission and a Bearer access token.
+      operationId: graphql
+      servers:
+      - url: https://apollo-gateway-v4-api.prod.docontrol.io
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+                operationName:
+                  type: string
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Access token returned from /refresh
