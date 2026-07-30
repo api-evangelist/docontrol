@@ -3,7 +3,20 @@ name: DoControl
 description: >-
   DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/docontrol.png
 tags:
   - Data Security
   - SaaS Security
@@ -13,16 +26,35 @@ created: '2026-03-27'
 modified: '2026-04-28'
 specificationVersion: '0.19'
 apis:
-  - aid: docontrol:docontrol
-    name: DoControl
-    description: >-
-      DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
-    humanURL: https://www.docontrol.io
-    tags:
-      - SaaS Security
-    properties:
-      - type: Documentation
-        url: https://docs.docontrol.io/
+- aid: docontrol:docontrol
+  name: DoControl
+  description: >-
+    DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider
+    threat prevention for cloud applications.
+  humanURL: https://www.docontrol.io
+  tags:
+  - SaaS Security
+  properties:
+  - type: Documentation
+    url: https://docs.docontrol.io/
+- aid: docontrol:docontrol-authentication-api
+  name: DoControl Authentication API
+  description: The Authentication API from DoControl — 1 operation(s) for authentication.
+  humanURL: https://www.docontrol.io
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/docontrol-authentication-api-openapi.yml
+- aid: docontrol:docontrol-graphql-api
+  name: DoControl GraphQL API
+  description: The GraphQL API from DoControl — 1 operation(s) for graphql.
+  humanURL: https://www.docontrol.io
+  tags:
+  - GraphQL
+  properties:
+  - type: OpenAPI
+    url: openapi/docontrol-graphql-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/docontrol-agentic-access.yml
