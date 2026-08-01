@@ -1,0 +1,16 @@
+{
+  "provider": "docontrol",
+  "sources": [
+    "docontrol-authentication-api-openapi.yml",
+    "docontrol-graphql-api-openapi.yml"
+  ],
+  "outputs": [
+    "docontrol-authentication-api-openapi.yml",
+    "docontrol-graphql-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
