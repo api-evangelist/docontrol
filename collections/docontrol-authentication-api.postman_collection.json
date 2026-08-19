@@ -1,0 +1,148 @@
+{
+  "item": [
+    {
+      "id": "71a5acb9-80d6-4d8e-a4ac-880ffe862348",
+      "name": "Authentication",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ae665015-d431-47d6-a9fb-efceabbf3bb6",
+          "name": "Exchange refresh token for access token",
+          "request": {
+            "name": "Exchange refresh token for access token",
+            "description": {
+              "content": "Exchange the API key (refresh token) for an access token that is valid for approximately 5 minutes. Use the access token as a Bearer token in subsequent GraphQL requests.",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "refresh"
+              ],
+              "host": [
+                "auth",
+                "prod",
+                "docontrol",
+                "io"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1ad0c4ce-f6af-4d68-980a-8fbfb9912f32",
+              "name": "Access token",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "refresh"
+                  ],
+                  "host": [
+                    "auth",
+                    "prod",
+                    "docontrol",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accessToken\": \"string\",\n  \"expiresIn\": 2546\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://apollo-gateway-v4-api.prod.docontrol.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a72526bf-626a-4788-a35b-15bf129c0c8b",
+    "name": "DoControl Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "DoControl exposes a GraphQL API for its SaaS data security platform. Authentication uses a short-lived access token obtained by exchanging a refresh token (the API key issued from the DoControl admin panel) at the auth endpoint. All GraphQL queries and mutations are sent as POST requests to the gateway endpoint.",
+      "type": "text/plain"
+    }
+  }
+}
