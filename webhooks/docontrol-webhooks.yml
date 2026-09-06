@@ -1,0 +1,73 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://docs.docontrol.io/docontrol-user-guide/system-management/settings/connectors/settings-webhooks.md
+  and https://docs.docontrol.io/docontrol-user-guide/system-management/settings/connectors/siem-and-soar-connectors.md
+  — fetched 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  DoControl has an outbound event surface, but it is workflow-shaped rather than catalogue-shaped.
+  There is no subscribable event catalogue, no published payload schema, no signing scheme and no
+  delivery/retry semantics. What exists is a "Notify by webhook" action a customer drops into a
+  workflow: whenever that workflow's trigger fires, DoControl POSTs a notification to a URL the
+  customer registered. The set of possible events is therefore the set of workflow triggers the
+  customer builds, which is why no fixed event list is published — and why none is invented here.
+asyncapi:
+  published: false
+  note: >-
+    No AsyncAPI document exists on any DoControl host and none is generated here. Without a
+    published payload schema or event catalogue there is nothing faithful to describe.
+direction: outbound
+model: workflow-triggered
+subscription:
+  self_service: true
+  where: DoControl console — Settings > Connectors > Webhooks
+  steps:
+  - Generate a webhook URL in the receiving app (Slack, Microsoft Teams, or any third-party SIEM/SOAR endpoint).
+  - Add the webhook in DoControl with a channel name and that URL.
+  - Add the "Notify by webhook" action to a workflow and select the webhook.
+  api_manageable: false
+  note: >-
+    Webhook registration is console-only. Nothing in the public documentation describes creating,
+    listing or deleting a webhook through the GraphQL API, so an agent cannot manage its own
+    subscriptions.
+channels:
+- type: slack
+  description: Incoming-webhook URL from the Slack app directory.
+- type: teams
+  description: Connector URL from Microsoft Teams.
+- type: custom
+  description: >-
+    Any third-party HTTPS endpoint, explicitly including SIEM and SOAR platforms.
+events:
+  catalogue_published: false
+  count: 0
+  note: >-
+    Events are whatever the customer's workflow triggers on; DoControl publishes no enumerated
+    event-type list, no `type` field vocabulary and no example payload.
+delivery:
+  signing: undocumented
+  retries: undocumented
+  ordering: undocumented
+  timeout: undocumented
+  replay: undocumented
+  note: >-
+    None of these is documented publicly. A consumer cannot verify that a received POST came from
+    DoControl, because no signature header or shared-secret scheme is published.
+related_export_surfaces:
+- name: SIEM and SOAR connectors
+  targets:
+  - Splunk
+  - Datadog
+  - Sumo Logic
+  - Custom connector
+  description: >-
+    A separate, first-class log/alert export path distinct from workflow webhooks.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/connectors/siem-and-soar-connectors.md
+gaps:
+- No event catalogue.
+- No payload schema or example.
+- No signature verification scheme.
+- No retry, ordering or replay semantics.
+- No API-managed subscriptions.

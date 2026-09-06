@@ -1,0 +1,107 @@
+generated: '2026-09-06'
+method: derived
+source: >-
+  Derived from openapi/ plus DoControl's published documentation
+  (https://docs.docontrol.io/docontrol-user-guide/system-management/api.md,
+  .../getting-started/overview/security-privacy-and-compliance.md) and live probes of
+  https://auth.prod.docontrol.io and https://apollo-gateway-v4-api.prod.docontrol.io on 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  Cross-cutting standards assertions for the DoControl API surface. DoControl's public API is a
+  single Apollo GraphQL gateway fronted by a bespoke token-exchange endpoint; almost every REST
+  convention in this list is therefore genuinely inapplicable rather than merely missing, and is
+  recorded that way.
+conformance:
+- id: graphql
+  conforms: true
+  evidence: >-
+    DoControl states "The API is based on the GraphQL query language" and publishes a single
+    POST endpoint at https://apollo-gateway-v4-api.prod.docontrol.io/graphql. The endpoint is
+    live and answers an anonymous introspection POST with HTTP 401 MISSING ACCESS_TOKEN.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+- id: graphql-error-envelope
+  conforms: true
+  evidence: >-
+    The docs document the standard GraphQL error envelope verbatim — a `data` key and an `errors`
+    array of {message, locations, path} — and state that the API returns 200 OK even on error.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+- id: mcp
+  conforms: true
+  evidence: >-
+    First-party MCP server dc-mcp-server v1.0.9 published from the DoControl GitHub organization,
+    built on Apollo MCP Server, stdio transport.
+  source: https://github.com/docontrol-io/dc-mcp-server
+- id: bearer-token
+  conforms: true
+  evidence: >-
+    RFC 6750 bearer presentation — `Authorization: Bearer [access token]` — documented and modelled
+    in the OpenAPI as securityScheme bearerAuth.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth 2.0 authorization server. The exchange at /refresh is a bespoke
+    {"refreshToken": "..."} POST, not an RFC 6749 token endpoint — no grant_type, no client
+    credentials, no scope parameter — and /.well-known/oauth-authorization-server 404s on every
+    DoControl host.
+- id: oidc
+  conforms: false
+  evidence: >-
+    /.well-known/openid-configuration returns 404 on docontrol.io, www.docontrol.io,
+    docs.docontrol.io, auth.prod.docontrol.io and apollo-gateway-v4-api.prod.docontrol.io.
+    DoControl does consume OIDC/SAML for console SSO (Okta, Entra ID, ForgeRock, JumpCloud,
+    OneLogin, generic SAML), but that is inbound console login, not an API-side OIDC provider.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/single-sign-on-sso.md
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere in the spec or in observed responses. The unauthenticated
+    gateway probe returned HTTP 401 with content-type text/html and the body MISSING ACCESS_TOKEN;
+    /refresh returned HTTP 400 with an empty body.
+- id: rfc6585-rate-limit-headers
+  conforms: false
+  evidence: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appeared on any observed response from
+    either host on 2026-09-06.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or equivalent replay protection is documented for the GraphQL
+    gateway or the token exchange.
+- id: pagination
+  conforms: false
+  evidence: >-
+    The GraphQL schema exposes Relay-style `nodes` collections in DoControl's own published
+    examples, but DoControl states explicitly that "API pagination is not supported" in the
+    DoControl API workflow action, and publishes no cursor or page-parameter reference.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+- id: scim
+  conforms: false
+  evidence: >-
+    No SCIM schema URN and no /scim/v2 surface. DoControl reads identity and HR data from Okta,
+    Entra ID and HRIS vendors through their APIs; it does not itself expose a SCIM service.
+- id: odata
+  conforms: false
+  evidence: No $metadata document and no OData query conventions; the surface is GraphQL.
+- id: fhir
+  conforms: false
+  evidence: Not a healthcare data API; no FHIR resources are published.
+- id: hsts
+  conforms: true
+  evidence: >-
+    Strict-Transport-Security max-age=31536000; includeSubDomains; preload observed on
+    apollo-gateway-v4-api.prod.docontrol.io and on www.docontrol.io.
+  source: probed 2026-09-06
+domain_standard:
+  declared: false
+  note: >-
+    REWARD-ONLY and deliberately left empty. SaaS security posture management (SSPM) / DSPM has no
+    ratified interchange standard that a vendor contract can declare the way a payments API
+    declares ISO 20022 or an education API declares OneRoster. DoControl's contract declares none,
+    and none is invented here. The nearest cross-vendor surfaces DoControl does speak — SIEM/SOAR
+    export to Splunk, Datadog and Sumo Logic — are vendor-specific connectors, not a standard.
+compliance_programs:
+  note: >-
+    Certification claims are recorded separately in security/docontrol-trust-center.yml with their
+    own evidence, not asserted as contract conformance here.

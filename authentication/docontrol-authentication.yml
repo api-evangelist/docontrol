@@ -1,13 +1,107 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/docontrol-openapi.yml
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://docs.docontrol.io/docontrol-user-guide/system-management/api.md and
+  https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md, joined to
+  the securitySchemes in openapi/docontrol-authentication-api-openapi.yml and
+  openapi/docontrol-graphql-api-openapi.yml. Live behaviour probed 2026-09-06.
+provider: DoControl
+providerId: docontrol
+docs: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+description: >-
+  Two-step credential flow. A long-lived API key (which DoControl calls a refresh token) is minted
+  in the console and exchanged at a bespoke endpoint for a five-minute bearer access token, which
+  is then presented to the GraphQL gateway. This is NOT OAuth 2.0 — there is no grant_type, no
+  client identity, no scope parameter and no authorization-server metadata document.
 summary:
   types:
   - http
+  - apiKey
+  oauth2: false
+  oidc: false
+  mtls: false
 schemes:
 - name: bearerAuth
   type: http
   scheme: bearer
-  description: Access token returned from /refresh
+  description: Access token returned from the token exchange; valid for 5 minutes.
+  in: header
+  header: Authorization
+  applies_to:
+  - https://apollo-gateway-v4-api.prod.docontrol.io/graphql
   sources:
-  - openapi/docontrol-openapi.yml
+  - openapi/docontrol-authentication-api-openapi.yml
+  - openapi/docontrol-graphql-api-openapi.yml
+- name: refreshToken
+  type: apiKey
+  in: body
+  field: refreshToken
+  description: >-
+    The API key created in the DoControl admin panel, presented in the JSON body of the token
+    exchange. Valid for 10 years. Not modelled as a securityScheme in the spec (the /refresh
+    operation is declared `security: []`), but it is the credential that actually gates the API.
+  applies_to:
+  - https://auth.prod.docontrol.io/refresh
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+flow:
+- step: 1
+  action: Create an API key
+  where: DoControl console — Settings > Admin > API keys
+  yields: refresh token (shown once, unrecoverable afterwards)
+  requires: admin or super-admin console permission
+- step: 2
+  action: Exchange the refresh token for an access token
+  request: 'POST https://auth.prod.docontrol.io/refresh  {"refreshToken": "<api key>"}'
+  yields: '{"token": "<access token>", "expiresIn": 300, "refreshToken": "<refresh token>"}'
+  note: >-
+    The response field carrying the short-lived credential is `token`, not `accessToken`. The
+    harvested OpenAPI models it as `accessToken`; DoControl's own MCP server README documents
+    `token` and warns explicitly not to confuse it with `refreshToken`. Corrected in
+    overlays/docontrol-authentication-api-overlay.yaml.
+  source: https://github.com/docontrol-io/dc-mcp-server
+- step: 3
+  action: Call the GraphQL gateway
+  request: 'POST https://apollo-gateway-v4-api.prod.docontrol.io/graphql  Authorization: Bearer <token>'
+  requires: at least admin permission on the key
+privilege_levels:
+- name: super-admin
+  description: Can change any functionality including system configuration and Team settings.
+- name: admin
+  description: Can change any functionality including system configuration, but not Team settings.
+- name: viewer
+  description: Read-only; cannot read anything under Settings, and cannot access the API keys tab.
+- note: >-
+    An admin can mint admin and viewer keys but not super-admin keys; only a super-admin can mint a
+    super-admin key. These are console privilege levels attached to a key, not OAuth scopes — a
+    caller cannot request a narrower grant at exchange time, and there is no scope parameter or
+    downscoping mechanism.
+credential_hygiene:
+  max_keys_per_tenant: 10
+  key_name_charset: '[a-zA-Z0-9_]'
+  key_names_unique: true
+  refresh_token_ttl: 10 years
+  access_token_ttl_seconds: 300
+  rotation_policy_published: false
+  revocation: Delete the key in Settings > Admin > API keys.
+  risk_note: >-
+    A 10-year bearer-equivalent credential with no published rotation guidance and no per-key
+    scoping beyond three coarse levels is the weakest part of this auth model. The minimum useful
+    key for API access is `admin`, which is also a key that can change system configuration —
+    least privilege is not reachable for a read-only integration that needs anything under
+    Settings.
+observed:
+- url: https://apollo-gateway-v4-api.prod.docontrol.io/graphql
+  request: POST with no Authorization header
+  status: 401
+  body: MISSING ACCESS_TOKEN
+  observed: '2026-09-06'
+- url: https://auth.prod.docontrol.io/refresh
+  request: 'POST {"refreshToken":"invalid"}'
+  status: 400
+  body: (empty)
+  observed: '2026-09-06'
+discovery_documents:
+  oauth_authorization_server: 404 on every host
+  openid_configuration: 404 on every host
+  oauth_protected_resource: 404 on every host
+  cross_link: well-known/docontrol-well-known.yml

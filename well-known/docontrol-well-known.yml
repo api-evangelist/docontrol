@@ -1,0 +1,211 @@
+generated: '2026-09-06'
+method: probed
+source: live HTTP probes of every host this record knows
+description: >-
+  Probe of the RFC 8615 /.well-known/ surface across every DoControl host in this record —
+  the registrable domain and www, the docs host, the two OpenAPI servers[] hosts, the app
+  console host, and the status host. No DoControl-authored well-known document was found on
+  any host, so no WellKnown or SecurityTxt pointer is emitted. Two 200s were returned and
+  both are false positives, recorded below with the reason.
+hosts:
+- host: docontrol.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: www.docontrol.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: docs.docontrol.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: auth.prod.docontrol.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: apollo-gateway-v4-api.prod.docontrol.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: app.docontrol.io
+  note: >-
+    SPA catch-all. Every /.well-known/* path answers HTTP 200 with the same React index.html
+    shell (identical byte length, content-type text/html). None of these is a document — they
+    are recorded as false positives and score nothing.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    false_positive: spa-shell
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    false_positive: spa-shell
+- host: status.docontrol.io
+  note: >-
+    DoControl-branded page hosted on Atlassian Statuspage. The 200 on /.well-known/security.txt
+    is ATLASSIAN's own document — Contact mailto:security@atlassian.com, Canonical
+    https://www.atlassian.com/.well-known/security.txt — served by the hosting vendor for every
+    Statuspage tenant. It is not a DoControl document and is deliberately not saved or pointed at.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    false_positive: vendor-owned-document
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+summary:
+  hosts_probed: 7
+  documents_found: 0
+  agent_card: absent
+  security_txt: absent
+  note: >-
+    DoControl does publish a security contact (security@docontrol.io) — but on a documentation
+    page, not at /.well-known/security.txt. See security/docontrol-vulnerability-disclosure.yml.

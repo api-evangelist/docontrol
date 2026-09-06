@@ -1,0 +1,48 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  Registry searches of npm (registry.npmjs.org search for "docontrol" — 0 results), PyPI
+  (pypi.org/pypi/docontrol/json — HTTP 404), and an enumeration of the DoControl GitHub
+  organization (api.github.com/orgs/docontrol-io/repos — 11 repositories, 9 of them forks of
+  third-party tooling). Probed 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  DoControl publishes no client SDK in any language registry. The one first-party distributable it
+  ships is the dc-mcp-server binary, released as platform tarballs from GitHub Releases — not a
+  client library and not something a consumer imports, which is why no SDKs pointer is emitted for
+  this record. Consumers of the DoControl GraphQL API write their own client or use a generic
+  GraphQL library.
+sdk_count: 0
+package_count: 1
+packages:
+- name: dc-mcp-server
+  official: true
+  kind: mcp-server
+  language: Rust
+  registry: github-releases
+  url: https://github.com/docontrol-io/dc-mcp-server/releases
+  repository: https://github.com/docontrol-io/dc-mcp-server
+  version: v1.0.9
+  published: '2025-11-05'
+  artifacts:
+  - dc-mcp-server-linux-x86_64.tar.gz
+  - dc-mcp-server-linux-aarch64.tar.gz
+  - dc-mcp-server-macos-aarch64.tar.gz
+  install: "curl -L https://github.com/docontrol-io/dc-mcp-server/releases/latest/download/dc-mcp-server-macos-aarch64.tar.gz | tar xz"
+  note: >-
+    Not published to crates.io despite being a Rust binary — there is no `docontrol` or
+    `dc-mcp-server` crate. Distribution is GitHub Releases only, so there is no registry metadata
+    endpoint to query; version and published date are read from the GitHub Releases API, which is
+    the authoritative source for this distribution channel. Windows binaries were dropped at
+    v1.0.9.
+registries_checked:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=docontrol
+  result: 0 packages
+- registry: pypi
+  query: https://pypi.org/pypi/docontrol/json
+  result: HTTP 404
+- registry: github-releases
+  query: https://api.github.com/repos/docontrol-io/dc-mcp-server/releases
+  result: 10 releases, latest v1.0.9

@@ -1,0 +1,88 @@
+generated: '2026-09-06'
+method: searched
+source: https://github.com/docontrol-io/dc-mcp-server
+provider: DoControl
+providerId: docontrol
+name: DoControl MCP Server
+status: published
+description: >-
+  DoControl publishes a first-party MCP server, dc-mcp-server, from its own GitHub organization.
+  It is a DoControl-maintained fork of apollographql/apollo-mcp-server (109 commits ahead of
+  upstream at time of search) that wraps the DoControl Apollo GraphQL gateway and adds
+  DoControl's refresh-token authentication flow. It is distributed as signed release tarballs
+  for linux-x86_64, linux-aarch64 and macos-aarch64 — there is no npm, PyPI or crates.io
+  package, and there is no hosted/remote endpoint. An operator installs the binary locally and
+  points an MCP client at it over stdio.
+deployment:
+  mode: local-stdio
+  endpoint: null
+  install: "curl -L https://github.com/docontrol-io/dc-mcp-server/releases/latest/download/dc-mcp-server-macos-aarch64.tar.gz | tar xz && chmod +x dc-mcp-server && sudo mv dc-mcp-server /usr/local/bin/"
+  package: https://github.com/docontrol-io/dc-mcp-server/releases
+  auth: api-key
+  verified: searched
+  note: >-
+    mode is local-stdio because the provider's own configuration example sets transport.type
+    stdio and the MCP client entry is a `command` pointing at a local binary path. No remote
+    URL an MCP client can POST to is published anywhere in DoControl's documentation or repo,
+    so no endpoint is recorded. auth is api-key because the operator supplies DC_REFRESH_TOKEN
+    (the 10-year refresh token minted in the DoControl admin panel); the server exchanges it at
+    https://auth.prod.docontrol.io/refresh for a 5-minute bearer access token and re-refreshes
+    on demand.
+repository:
+  url: https://github.com/docontrol-io/dc-mcp-server
+  language: Rust
+  license: https://github.com/docontrol-io/dc-mcp-server/blob/main/LICENSE
+  upstream: https://github.com/apollographql/apollo-mcp-server
+  fork: true
+  ahead_of_upstream_commits: 109
+  latest_release: v1.0.9
+  latest_release_date: '2025-11-05'
+  release_assets:
+  - dc-mcp-server-linux-x86_64.tar.gz
+  - dc-mcp-server-linux-aarch64.tar.gz
+  - dc-mcp-server-macos-aarch64.tar.gz
+backing_api:
+  graphql_endpoint: https://apollo-gateway-v4-api.prod.docontrol.io/graphql
+  auth_endpoint: https://auth.prod.docontrol.io/refresh
+  graph_ref: docontrol-api@current
+  schema_source: introspection
+tools:
+- name: execute
+  category: graphql
+  description: Run a GraphQL query or mutation against the live DoControl endpoint; validates syntax, executes, returns JSON.
+  source: provider README, "Introspection Tools" section
+- name: introspect
+  category: schema
+  description: Explore the DoControl GraphQL schema — type information with hierarchy, fields, arguments and descriptions.
+  source: provider README, "Introspection Tools" section
+- name: search
+  category: schema
+  description: Fuzzy-search the schema for types by name and return matching type definitions.
+  source: provider README, "Introspection Tools" section
+- name: validate
+  category: schema
+  description: Validate a GraphQL operation against the schema before execution.
+  source: provider README, "Introspection Tools" section
+dynamic_tools:
+  enabled: true
+  note: >-
+    Beyond the four fixed introspection tools, the provider states that "each query and mutation
+    becomes an MCP tool" when `operations: [introspect]` is configured. The resulting tool list is
+    therefore whatever the authenticated DoControl graph exposes to that tenant; it cannot be
+    enumerated anonymously because the gateway answers an unauthenticated introspection POST with
+    HTTP 401 MISSING ACCESS_TOKEN. Named DoControl GraphQL operations confirmed from the public
+    documentation are listed in mcp/docontrol-tool-crosswalk.yml.
+safety:
+  mutation_gate: allow-mutations
+  default: none
+  note: >-
+    The provider's documented default configuration is `allow-mutations: none` (read-only). Setting
+    it to `all` exposes every DoControl mutation — including the Google Drive remediation mutations
+    that remove collaborators and change asset owners — as agent-callable tools.
+x-evidence:
+  fetched: '2026-09-06'
+  sources:
+  - https://github.com/docontrol-io/dc-mcp-server
+  - https://api.github.com/repos/docontrol-io/dc-mcp-server
+  - https://api.github.com/repos/docontrol-io/dc-mcp-server/releases
+  - https://docs.docontrol.io/docontrol-user-guide/system-management/api.md

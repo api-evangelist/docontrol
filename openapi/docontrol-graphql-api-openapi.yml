@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: DoControl Authentication GraphQL API
+  title: DoControl Authentication Graph QL API
   description: DoControl exposes a GraphQL API for its SaaS data security platform. Authentication uses a short-lived access token obtained by exchanging a refresh token (the API key issued from the DoControl admin panel) at the auth endpoint. All GraphQL queries and mutations are sent as POST requests to the gateway endpoint.
   version: '4.0'
 servers:

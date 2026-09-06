@@ -1,0 +1,101 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://docs.docontrol.io/docontrol-user-guide/system-management/api.md — the "GraphQL error
+  handling" section — enriched with statuses observed on live unauthenticated probes of
+  https://auth.prod.docontrol.io/refresh and
+  https://apollo-gateway-v4-api.prod.docontrol.io/graphql on 2026-09-06.
+provider: DoControl
+providerId: docontrol
+format: graphql
+rfc9457: false
+description: >-
+  DoControl publishes no HTTP problem-type catalogue and no error-code reference. Its documented
+  error contract is the GraphQL one: the gateway answers 200 OK even for failed operations and the
+  failure is carried in the response body. The transport-level statuses below are the ones this
+  pipeline observed directly; the field-level GraphQL error codes are not published and cannot be
+  enumerated without an authenticated tenant token.
+envelope:
+  style: graphql
+  success_field: data
+  error_field: errors
+  error_entry_fields:
+  - message
+  - locations
+  - path
+  example: |
+    {  "errors":[
+        {
+              "message": "User not found",
+              "locations": [{ "line": 6, "column": 7 }],
+              "path": ["user", 1]
+         }
+        ]
+       }
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+  warning: >-
+    A 200 status is NOT a success signal on this API. An agent that branches on the HTTP status
+    alone will treat every application-level failure as a success.
+problem_types:
+- id: missing-access-token
+  status: 401
+  title: Missing access token
+  detail: >-
+    The GraphQL gateway was called without an Authorization header. Observed body is the literal
+    string MISSING ACCESS_TOKEN with content-type text/html — not JSON, and not a problem document.
+  operation: graphql
+  remediation: >-
+    Exchange the refresh token at https://auth.prod.docontrol.io/refresh and resend with
+    `Authorization: Bearer <token>`.
+  method: probed
+  evidence:
+    url: https://apollo-gateway-v4-api.prod.docontrol.io/graphql
+    request: 'POST {"query":"{__typename}"} with no Authorization header'
+    status: 401
+    content_type: text/html
+    observed: '2026-09-06'
+- id: invalid-token-exchange
+  status: 400
+  title: Token exchange rejected
+  detail: >-
+    The refresh endpoint rejects an empty body and an unrecognised refreshToken with the same
+    HTTP 400 and an empty response body — the two failures are indistinguishable to a client.
+  operation: refreshToken
+  remediation: >-
+    Confirm the value is the `refreshToken` field from a prior exchange (not the short-lived
+    `token`), and that the key has not been deleted in Settings > Admin > API keys.
+  method: probed
+  evidence:
+    url: https://auth.prod.docontrol.io/refresh
+    requests:
+    - 'POST {}'
+    - 'POST {"refreshToken":"invalid"}'
+    status: 400
+    body: (empty)
+    observed: '2026-09-06'
+- id: insufficient-permission
+  status: 200
+  title: Insufficient permission
+  detail: >-
+    DoControl states that at least admin permission is required to interact with the API, and that
+    a viewer-level API key can only read. A key without the required privilege fails at the
+    GraphQL layer, inside the errors array, not with an HTTP status.
+  operation: graphql
+  remediation: Re-issue the API key with admin or super-admin privilege.
+  method: searched
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+- id: server-unavailable
+  status: 5xx
+  title: Server unavailable
+  detail: >-
+    DoControl documents that a 5xx is returned only when the server itself is unavailable, never
+    for an application error.
+  operation: graphql
+  remediation: Retry with backoff; check https://status.docontrol.io.
+  method: searched
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+gaps:
+- No published GraphQL error-code vocabulary (the `extensions.code` values Apollo emits are not documented).
+- No error reference page.
+- No application/problem+json anywhere in the surface.
+- The 400 from /refresh carries an empty body, so the client is told nothing about the cause.

@@ -1,0 +1,75 @@
+overlay: 1.0.0
+info:
+  title: DoControl Authentication API — API Evangelist enhancements
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-06'
+  method: generated
+  source: >-
+    Enhancements derived from DoControl's own documentation
+    (https://docs.docontrol.io/docontrol-user-guide/system-management/api.md,
+    https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md) and
+    from the provider's MCP server README
+    (https://github.com/docontrol-io/dc-mcp-server), plus live probes of
+    https://auth.prod.docontrol.io/refresh on 2026-09-06.
+  extends: openapi/docontrol-authentication-api-openapi.yml
+  note: >-
+    The base spec is left untouched. One action below CORRECTS a response field name: the base
+    spec models the 200 body as {accessToken, expiresIn}, while DoControl's own published example
+    of the same call returns {token, expiresIn, refreshToken}. The correction is applied as an
+    overlay rather than an edit so the harvested document stays byte-faithful.
+actions:
+- target: $.info
+  description: Record the documentation and support surface on the spec itself.
+  update:
+    contact:
+      name: DoControl Support
+      url: https://www.docontrol.io/support
+    x-documentation: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+    x-status-page: https://status.docontrol.io
+- target: $.paths['/refresh'].post
+  description: >-
+    Add the token lifetimes and key-management limits DoControl publishes, and the observed
+    error status for a malformed or rejected exchange.
+  update:
+    x-token-lifetimes:
+      refresh_token_validity: 10 years
+      access_token_validity: 5 minutes
+      source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+    x-key-limits:
+      max_api_keys_per_tenant: 10
+      key_name_charset: '[a-zA-Z0-9_]'
+      key_names_must_be_unique: true
+      source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+    x-privilege-levels:
+    - super-admin
+    - admin
+    - viewer
+    x-observed-errors:
+    - status: 400
+      condition: empty or unparseable request body
+      body: (empty)
+      observed: '2026-09-06'
+    - status: 400
+      condition: refreshToken present but not a valid DoControl refresh token
+      body: (empty)
+      observed: '2026-09-06'
+- target: $.paths['/refresh'].post.responses['200'].content['application/json'].schema
+  description: >-
+    Correct the 200 response shape to the one DoControl documents. Its own example response is
+    {"token": "...", "expiresIn": 300, "refreshToken": "..."} and its MCP README warns explicitly
+    that the long-lived value to keep is `refreshToken`, not `token`.
+  update:
+    type: object
+    properties:
+      token:
+        type: string
+        description: 'Short-lived access token. Send as `Authorization: Bearer <token>` to the GraphQL gateway.'
+      expiresIn:
+        type: integer
+        description: Access-token lifetime in seconds. DoControl's published example returns 300.
+      refreshToken:
+        type: string
+        description: The long-lived refresh token to persist for the next exchange.
+    x-corrected-from: '{accessToken, expiresIn}'
+    x-correction-source: https://github.com/docontrol-io/dc-mcp-server

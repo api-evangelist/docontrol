@@ -1,0 +1,152 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://docs.docontrol.io/docontrol-user-guide/system-management/api.md,
+  https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md,
+  https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+  and its child pages; enriched with live probes of both API hosts on 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  Cross-cutting runtime semantics for the DoControl API. The surface is one GraphQL gateway plus a
+  bespoke token exchange, so several REST conventions are not merely undocumented but structurally
+  absent. Everything below is either quoted from DoControl's own documentation or observed on a
+  live request; nothing is inferred from what a platform of this shape usually does.
+auth:
+  style: bearer
+  scheme: 'Authorization: Bearer <access token>'
+  credential_exchange:
+    endpoint: https://auth.prod.docontrol.io/refresh
+    request: '{"refreshToken": "<api key>"}'
+    access_token_ttl_seconds: 300
+    refresh_token_ttl: 10 years
+  minimum_permission: admin
+  privilege_levels:
+  - super-admin
+  - admin
+  - viewer
+  cross_link: authentication/docontrol-authentication.yml
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  note: >-
+    No Idempotency-Key header, no client-supplied request key, no documented replay window. This
+    matters more here than on an average API: the mutating surface includes
+    startGoogleRemediationAssessment, which removes collaborators from Google Drive assets and can
+    change asset ownership. A retried mutation after a network timeout has no published protection
+    against firing twice. The one adjacent control DoControl does document is the 30-second
+    timeout on the in-workflow API step, which tells an agent when to stop waiting but not whether
+    the first call landed.
+  cross_link: errors/docontrol-problem-types.yml
+reversibility:
+  grade: documented
+  applies_to: write
+  note: >-
+    DoControl documents no generic undo, revert or rollback for API-initiated remediation. What it
+    documents instead is compensating actions: Google Drive collaborators removed by a remediation
+    can be re-added with the Add collaborator action, and Slack Enterprise quarantined files and
+    messages can be restored — while deleted Slack items cannot be recovered at all. No time
+    window is stated for any of these, so this grades `documented` rather than `verified`.
+  operations:
+  - write_operation: startGoogleRemediationAssessment
+    remediation_types:
+    - GOOGLE_REMOVE_COLLABORATORS
+    - GOOGLE_REMOVE_INTERNAL_COLLABORATORS
+    - GOOGLE_REMOVE_ANY_COLLABORATOR
+    - GOOGLE_REMOVE_PUBLIC_SHARING
+    - GOOGLE_REMOVE_ORG_WIDE_SHARING
+    - GOOGLE_CHANGE_OWNER
+    - GOOGLE_REMOVE_COLLABORATOR_FROM_ORG
+    - GOOGLE_REMOVE_SPECIFIC_COLLABORATOR_FROM_ASSET
+    reversal: >-
+      Compensating only — re-grant access with the Add collaborator remediation action. There is
+      no reversal operation that restores the prior permission set as it was.
+    reversal_operation_id: null
+    window: null
+    window_source: null
+  - write_operation: Slack Enterprise quarantine
+    reversal: Restore the quarantined file or message.
+    reversal_operation_id: null
+    window: null
+    irreversible: >-
+      Deleted Slack items cannot be recovered. This is the one branch of the write surface that is
+      permanently destructive.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-on-demand-remediation.md
+dry_run_mode:
+  supported: false
+  note: >-
+    No preview, simulate or validate-only mode on the mutating surface. The MCP server's `validate`
+    tool checks that an operation is syntactically and schema-valid before execution — which is
+    useful, but it rehearses the query, not its effect. The nearest real control is the
+    `allow-mutations: none` default in the MCP config, which forbids writes entirely rather than
+    rehearsing them.
+pagination:
+  style: relay-nodes
+  supported_in_api: partial
+  params: []
+  response_fields:
+  - nodes
+  note: >-
+    DoControl's published query examples return Relay-shaped `nodes` collections, but no cursor,
+    page-size or page-token argument is documented anywhere, and DoControl states outright that
+    "API pagination is not supported" from the in-workflow DoControl API action step. A consumer
+    reading a large inventory has no published way to page it.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+field_selection:
+  style: graphql
+  supported: true
+  note: >-
+    Native GraphQL field selection — the consumer names exactly the fields it wants. This is the
+    strongest ergonomic property on the surface and it needs no vendor-specific expand or fields
+    parameter.
+filtering:
+  style: json-filter-string
+  note: >-
+    Filters are JSON objects passed as an escaped string in `filterString`, using a
+    {field: {single: {operator, value}}} shape — e.g.
+    {"permissionEmail":{"single":{"operator":"EQUALS","value":"..."}}}. Documented operators seen
+    in published examples: EQUALS. The full operator vocabulary is not published.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-on-demand-remediation/set-up-filters-for-api-remediation.md
+metadata:
+  supported: false
+  note: No customer-defined metadata or tagging convention is documented on API objects.
+request_tracing:
+  request_id_header: null
+  correlation: jobId / executionId
+  note: >-
+    There is no request-id or trace header. What DoControl does return on the remediation path is a
+    `jobId` and an `executionId`, and the documented way to follow a long-running remediation is to
+    poll googleRemediationAssessment for that jobId until jobTypeStatus is
+    REMEDIATION_WORKFLOW_DONE. That is an async job handle, not request tracing — a failed call
+    that never produced a jobId cannot be correlated to anything.
+versioning:
+  style: host-embedded
+  current: v4
+  cross_link: lifecycle/docontrol-lifecycle.yml
+error_envelope:
+  style: graphql
+  status_on_error: 200
+  fields:
+  - data
+  - errors
+  cross_link: errors/docontrol-problem-types.yml
+  note: A 200 is not a success signal on this API. Inspect the body.
+rate_limit_signaling:
+  headers_published: false
+  headers_observed: []
+  status_on_exhaustion: null
+  cross_link: rate-limits/docontrol-rate-limits.yml
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appeared on any response observed on
+    2026-09-04..06, and no request-rate limit is published. The constraints DoControl does publish
+    are payload and concurrency shaped, not rate shaped.
+request_constraints:
+  max_payload: 5MB
+  timeout_seconds: 30
+  operations_per_request: 1
+  scope: DoControl API workflow action step
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md

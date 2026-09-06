@@ -1,0 +1,44 @@
+generated: '2026-09-06'
+method: generated
+provider: DoControl
+providerId: docontrol
+source: >-
+  Authored from DoControl's published API documentation and grounded in the real operationIds in
+  openapi/ (refreshToken, graphql) and the real GraphQL operations DoControl prints in its own
+  examples (hrisUsers, startGoogleRemediationAssessment, googleRemediationAssessment). No
+  operation name in these skills was invented.
+description: >-
+  Packaged Agent Skills for the DoControl GraphQL API. DoControl publishes no skills or AGENTS.md
+  of its own; these are API Evangelist generations over its documented surface.
+skills:
+- name: docontrol-authenticate
+  file: skills/docontrol-authenticate.md
+  api: docontrol:docontrol-authentication-api
+  operations:
+  - refreshToken
+  - graphql
+  writes: false
+- name: docontrol-offboard-employee-access
+  file: skills/docontrol-offboard-employee-access.md
+  api: docontrol:docontrol-graphql-api
+  operations:
+  - refreshToken
+  - graphql
+  graphql_operations:
+  - hrisUsers
+  - startGoogleRemediationAssessment
+  - googleRemediationAssessment
+  writes: true
+  reversibility: compensating-only
+- name: docontrol-scheduled-drive-remediation
+  file: skills/docontrol-scheduled-drive-remediation.md
+  api: docontrol:docontrol-graphql-api
+  operations:
+  - refreshToken
+  - graphql
+  graphql_operations:
+  - startGoogleRemediationAssessment
+  - googleRemediationAssessment
+  writes: true
+  reversibility: compensating-only
+provider_published_skills: none

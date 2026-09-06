@@ -1,0 +1,122 @@
+generated: '2026-09-06'
+method: derived
+source: >-
+  Bound mcp/docontrol-mcp.yml tools to openapi/docontrol-authentication-api-openapi.yml and
+  openapi/docontrol-graphql-api-openapi.yml operationIds, plus the named GraphQL operations
+  DoControl publishes in its own documentation.
+provider: DoControl
+providerId: docontrol
+description: >-
+  DoControl's REST surface is two operations wide — one token exchange and one GraphQL passthrough —
+  so almost all of the real API surface is GraphQL fields behind the single /graphql operation.
+  The MCP server's `execute` tool is the only tool with a REST backing operation; the other three
+  are schema-introspection tools with no HTTP analogue. Confidence is medium rather than high
+  everywhere because the live GraphQL schema is auth-gated (HTTP 401 MISSING ACCESS_TOKEN on an
+  anonymous introspection POST), so field-level input schemas could not be read and are mapped by
+  name and by the documented examples only.
+surfaces:
+  openapi:
+  - openapi/docontrol-authentication-api-openapi.yml
+  - openapi/docontrol-graphql-api-openapi.yml
+  graphql:
+    endpoint: https://apollo-gateway-v4-api.prod.docontrol.io/graphql
+    gated: true
+    gate_evidence:
+      probe: 'POST {"query":"{__schema{queryType{name}}}"}'
+      status: 401
+      body: MISSING ACCESS_TOKEN
+  mcp:
+    transport: stdio
+    endpoint: null
+    gated: true
+    gate_evidence: requires DC_REFRESH_TOKEN issued from the DoControl admin panel
+crosswalk:
+- tool: execute
+  category: graphql
+  rest:
+  - graphql
+  binding: direct
+  confidence: high
+  note: >-
+    The `execute` tool POSTs a GraphQL document to the same endpoint the `graphql` OpenAPI
+    operation describes; it inherits that operation's requestBody (query, variables, operationName).
+- tool: introspect
+  category: schema
+  rest:
+  - graphql
+  binding: indirect
+  confidence: medium
+  note: >-
+    Implemented as a GraphQL introspection query through the same /graphql operation, but there is
+    no dedicated REST operation for schema discovery.
+- tool: search
+  category: schema
+  rest: []
+  binding: none
+  confidence: high
+  note: Client-side fuzzy search over the introspected schema index; never reaches the API.
+- tool: validate
+  category: schema
+  rest: []
+  binding: none
+  confidence: high
+  note: Local syntax and schema validation of a candidate operation; never reaches the API.
+mcp_only:
+- tool: search
+  reason: Local schema index lookup; no server operation exists for it.
+- tool: validate
+  reason: Local operation validation; no server operation exists for it.
+rest_only:
+- operationId: refreshToken
+  reason: >-
+    The token exchange at https://auth.prod.docontrol.io/refresh is performed by the MCP server
+    itself as part of its auth flow. It is deliberately not exposed as a tool — an agent that
+    could call it would be handling the 10-year refresh token directly.
+graphql_operations_documented:
+- name: hrisUsers
+  type: query
+  reachable_via: execute
+  arguments_documented:
+  - input.filters.primaryEmail.single.operator
+  - input.filters.primaryEmail.single.value
+  - input.serviceId
+  returns:
+  - nodes.personalEmail
+  - nodes.primaryEmail
+  - nodes.employmentEndDate
+  - nodes.employmentStatus
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-offboarding-employees.md
+- name: startGoogleRemediationAssessment
+  type: mutation
+  reachable_via: execute
+  arguments_documented:
+  - input.autoApproveInput.remediateInherited
+  - input.autoApproveInput.workflowId
+  - input.remediationType
+  - input.filterString
+  returns:
+  - jobId
+  - remediationType
+  - updatedAt
+  - executionId
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-on-demand-remediation.md
+- name: googleRemediationAssessment
+  type: query
+  reachable_via: execute
+  arguments_documented: []
+  returns:
+  - nodes.jobId
+  - nodes.jobTypeStatus
+  - nodes.executionId
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-offboarding-employees.md
+coverage:
+  mcp_tools: 4
+  mapped_to_rest: 2
+  mcp_only: 2
+  rest_operations: 2
+  rest_only: 1
+  graphql_operations_documented: 3
+  graphql_operations_total: unknown
+  note: >-
+    graphql_operations_total is unknown by measurement, not by omission — the schema is only
+    readable with an authenticated tenant token.

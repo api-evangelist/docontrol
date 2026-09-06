@@ -3,139 +3,59 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: DoControl
 providerId: docontrol
+generated: '2026-09-06'
+modified: '2026-09-06'
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+method: searched
+source: >-
+  https://www.docontrol.io/sitemap.xml (63 URLs, no pricing or plans page),
+  https://www.docontrol.io/pricing (HTTP 404), https://www.docontrol.io/get-a-demo (HTTP 200),
+  https://www.docontrol.io/contact-us (HTTP 200) — probed 2026-09-06.
 tags:
-  - Data Security
-  - SaaS Security
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
-plans:
-  - id: docontrol-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the DoControl API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: DoControl
-  - id: docontrol-pro
-    name: Professional
-    type: paid
-    description: Production tier for DoControl. Provides higher quotas, priority support, and access to
-      the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: DoControl
-  - id: docontrol-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for DoControl. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: DoControl
+- Data Security
+- SaaS Security
+description: >-
+  DoControl publishes no pricing. This file records that measured absence rather than a scaffold.
+  It REPLACES a generated 2026-05-04 scaffold that invented a Free / Professional / Enterprise
+  ladder with 1,000 and 100,000 request quotas and 10/100/1000 rpm rate limits — none of which
+  DoControl has ever published. Those figures were not sourced and are removed.
+plan_count: 0
+pricing_model: enterprise-quote
+public_pricing_page: false
+self_serve_signup: false
+free_tier: false
+trial:
+  published: false
+  note: >-
+    DoControl markets a free risk assessment (https://www.docontrol.io/free-risk-asses) and several
+    ROI calculators. These are lead-capture offers, not a product trial with published entitlements.
+plans: []
+evidence:
+- url: https://www.docontrol.io/pricing
+  status: 404
+  note: No pricing page exists at the conventional path.
+- url: https://www.docontrol.io/sitemap.xml
+  status: 200
+  note: >-
+    63 indexed URLs and none of them is a pricing or plans page. The commercial path the sitemap
+    does publish is /get-a-demo, /contact-us and /partners.
+- url: https://www.docontrol.io/get-a-demo
+  status: 200
+  note: The published route to a price is a demo request form.
+procurement_channels:
+- name: Direct
+  url: https://www.docontrol.io/get-a-demo
+- name: AWS Marketplace
+  url: https://www.docontrol.io/aws-marketplace
+  note: Listed as a procurement channel on DoControl's own site; per-listing pricing was not read.
+- name: Google Cloud Marketplace
+  url: https://www.docontrol.io/google-cloud
+api_metering:
+  published: false
+  note: >-
+    Nothing in the documentation prices, meters or quotas API calls. The API is a feature of the
+    platform subscription, not a separately billed product. The only per-tenant API quantity
+    DoControl publishes is a cap of 10 API keys.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,136 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  Entities and fields read verbatim from DoControl's published GraphQL examples at
+  https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-offboarding-employees.md
+  and .../api-for-on-demand-remediation.md, cross-checked against the two OpenAPI documents in
+  openapi/. Fetched 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  Partial entity graph for the DoControl GraphQL API. This is deliberately partial and says so:
+  the full schema is only readable through authenticated introspection (an anonymous
+  introspection POST to the gateway returns HTTP 401 MISSING ACCESS_TOKEN), so the entities below
+  are exactly those DoControl itself prints in public documentation examples — nothing is inferred
+  from the product's feature list, and no field appears here that DoControl has not published.
+coverage:
+  method: documented-examples-only
+  entities_documented: 3
+  entities_total: unknown
+  schema_readable: false
+  schema_gate: HTTP 401 MISSING ACCESS_TOKEN on anonymous introspection
+entities:
+- name: HrisUser
+  graphql_field: hrisUsers
+  kind: query
+  description: >-
+    An employee record read from a connected HRIS (BambooHR, HiBob, Deel HR, SAP SuccessFactors,
+    Workday). Used to resolve a terminated employee's personal email so their access can be
+    revoked.
+  collection_shape: '{ nodes { ... } }'
+  fields:
+  - name: primaryEmail
+    type: String
+    role: identifier
+    note: The organizational email address; the documented filter key.
+  - name: personalEmail
+    type: String
+    role: identifier
+    note: The personal email address, used as the join key into asset permissions.
+  - name: employmentEndDate
+    type: Date
+  - name: employmentStatus
+    type: String
+  arguments:
+  - name: input.serviceId
+    type: String
+    example: sap-successfactors
+    note: Names the HRIS integration the record comes from.
+  - name: input.filters.primaryEmail.single.operator
+    type: Enum
+    documented_values:
+    - EQUALS
+  - name: input.filters.primaryEmail.single.value
+    type: String
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-offboarding-employees.md
+- name: GoogleRemediationAssessment
+  graphql_field: startGoogleRemediationAssessment
+  kind: mutation
+  description: >-
+    Starts an asynchronous remediation job over the Google Drive asset inventory, selecting assets
+    with a JSON filter string and applying one remediation type.
+  fields:
+  - name: jobId
+    type: ID
+    role: identifier
+    note: The handle used to poll for completion.
+  - name: executionId
+    type: ID
+  - name: remediationType
+    type: Enum
+  - name: updatedAt
+    type: DateTime
+  arguments:
+  - name: input.remediationType
+    type: Enum
+    documented_values:
+    - GOOGLE_REMOVE_COLLABORATORS
+    - GOOGLE_REMOVE_INTERNAL_COLLABORATORS
+    - GOOGLE_REMOVE_ANY_COLLABORATOR
+    - GOOGLE_REMOVE_PUBLIC_SHARING
+    - GOOGLE_REMOVE_ORG_WIDE_SHARING
+    - GOOGLE_CHANGE_OWNER
+    - GOOGLE_REMOVE_COLLABORATOR_FROM_ORG
+    - GOOGLE_REMOVE_SPECIFIC_COLLABORATOR_FROM_ASSET
+  - name: input.filterString
+    type: String
+    note: >-
+      An escaped JSON array of filter clauses over asset attributes, e.g. permissionEmail and
+      ownerEmail, each shaped {single: {operator, value}}.
+  - name: input.autoApproveInput.workflowId
+    type: ID
+  - name: input.autoApproveInput.remediateInherited
+    type: Boolean
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-on-demand-remediation.md
+- name: GoogleRemediationAssessmentStatus
+  graphql_field: googleRemediationAssessment
+  kind: query
+  description: >-
+    Polls the status of a remediation job. DoControl notes this query takes no filter — the caller
+    must hold the jobId returned by the mutation.
+  collection_shape: '{ nodes { ... } }'
+  fields:
+  - name: jobId
+    type: ID
+    role: identifier
+  - name: executionId
+    type: ID
+  - name: jobTypeStatus
+    type: Enum
+    documented_values:
+    - REMEDIATION_WORKFLOW_DONE
+    note: Only the terminal success value is published; intermediate values are not documented.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action/api-for-offboarding-employees.md
+relationships:
+- from: GoogleRemediationAssessment
+  to: GoogleRemediationAssessmentStatus
+  type: has_one
+  via: jobId
+  note: The mutation returns the jobId that the status query is polled with.
+- from: HrisUser
+  to: GoogleRemediationAssessment
+  type: belongs_to
+  via: personalEmail -> filterString.permissionEmail
+  note: >-
+    Not a schema-declared edge — a documented join the caller performs by hand. DoControl's own
+    offboarding recipe reads personalEmail from the HRIS query and pastes it into the remediation
+    mutation's filter string.
+id_conventions:
+  note: >-
+    No id-prefix scheme is published (no cus_/acct_-style typed prefixes). Identifiers appear as
+    opaque jobId / executionId / workflowId values.
+gaps:
+- No public object reference or schema browser; the API Explorer lives inside the authenticated console.
+- No published enum vocabulary for jobTypeStatus beyond the terminal value.
+- No published operator vocabulary for filterString beyond EQUALS.
+- No SDL, no introspection dump, and no schema registry artifact is published anywhere public.

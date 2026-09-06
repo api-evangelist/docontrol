@@ -1,0 +1,79 @@
+generated: '2026-09-06'
+method: searched
+source: https://github.com/docontrol-io/dc-mcp-server/releases
+provider: DoControl
+providerId: docontrol
+description: >-
+  SCOPE WARNING, read before using this file: DoControl publishes NO changelog, release-notes or
+  "what's new" page for its platform or its API. The complete documentation index
+  (llms/docontrol-llms.txt, 392 entries) contains no such page, and the status page carries
+  incidents, not changes. The only dated, public, first-party release stream DoControl operates is
+  the GitHub Releases feed of its MCP server. That is what is recorded here, and it covers the MCP
+  server only — not the GraphQL API, not the platform.
+scope: mcp-server-only
+api_changelog_published: false
+platform_changelog_published: false
+repository: https://github.com/docontrol-io/dc-mcp-server
+scheme: semver
+current_version: v1.0.9
+current_version_date: '2025-11-05'
+window: all published releases as of 2026-09-06
+entries:
+- version: v1.0.9
+  date: '2025-11-05'
+  breaking: false
+  additions: []
+  highlights:
+  - 'Auth header changed to x-company-id (PRs #22/#23, merged between v1.0.8 and this release).'
+  - Windows removed from the release workflow and documentation; assets narrow to linux-x86_64, linux-aarch64 and macos-aarch64.
+  note: >-
+    Release bodies are empty on every DoControl release; highlights are read from the merged
+    commits and the published asset list, not from release notes.
+- version: v1.0.8
+  date: '2025-11-04'
+  breaking: false
+  highlights:
+  - Assets are linux-x86_64, macos-aarch64 and windows-x86_64; linux-aarch64 not yet built.
+- version: 1.0.7
+  date: '2025-11-04'
+  breaking: false
+  highlights:
+  - Release-workflow fixes.
+  note: Tagged without the `v` prefix, unlike every other release — the tag scheme is not consistent.
+- version: v1.0.6
+  date: '2025-10-30'
+  breaking: false
+  highlights: []
+- version: v1.0.5
+  date: '2025-10-30'
+  breaking: false
+  highlights: []
+- version: v1.0.4
+  date: '2025-10-16'
+  breaking: false
+  highlights: []
+- version: v1.0.3
+  date: '2025-10-15'
+  breaking: false
+  highlights: []
+- version: v1.0.2
+  date: '2025-10-12'
+  breaking: false
+  highlights:
+  - First release publishing DoControl-branded binaries (dc-mcp-server-*) instead of upstream apollo-mcp-server-* artifacts.
+- version: v1.0.1
+  date: '2025-10-12'
+  breaking: false
+  highlights:
+  - Assets still named apollo-mcp-server-*; the fork had not yet been rebranded.
+- version: v1.0.0
+  date: '2025-10-12'
+  breaking: false
+  highlights:
+  - Initial release of the DoControl fork of Apollo MCP Server.
+staleness:
+  latest_release_age_days_at_check: 305
+  checked: '2026-09-06'
+  note: >-
+    The last release predates this check by roughly ten months. The repository has been pushed to
+    since (2026-04-24) but only by dependency bumps, not a release.

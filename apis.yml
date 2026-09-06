@@ -1,7 +1,15 @@
 aid: docontrol
 name: DoControl
 description: >-
-  DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
+  DoControl is a SaaS data security platform providing automated data access governance, data loss
+  prevention, insider risk management, shadow-app discovery and misconfiguration management across
+  connected cloud applications including Google Workspace, Microsoft 365, Salesforce, Slack, Box,
+  Dropbox, Zoom, Jira and GitHub. Its public programmable surface is a single Apollo GraphQL
+  gateway at apollo-gateway-v4-api.prod.docontrol.io, reached with a five-minute bearer token
+  exchanged from a console-issued API key at auth.prod.docontrol.io, and DoControl ships a
+  first-party MCP server (dc-mcp-server) that exposes that graph to agents over stdio. Spin.AI
+  announced its acquisition of DoControl on 2026-09-01, stating that the DoControl product, site,
+  contracts and support are unchanged and that the brands operate independently.
 type: Index
 deliveryModel:
   model: unknown
@@ -32,10 +40,16 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/docontrol.
 tags:
   - Data Security
   - SaaS Security
+  - Data Access Governance
+  - Data Loss Prevention
+  - Insider Risk Management
+  - SSPM
+  - GraphQL
+  - MCP
 url: >-
   https://raw.githubusercontent.com/api-evangelist/docontrol/refs/heads/main/apis.yml
 created: '2026-03-27'
-modified: '2026-04-28'
+modified: '2026-09-06'
 specificationVersion: '0.23'
 apis:
 - aid: docontrol:docontrol
@@ -44,29 +58,50 @@ apis:
     DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider
     threat prevention for cloud applications.
   humanURL: https://www.docontrol.io
+  baseURL: https://apollo-gateway-v4-api.prod.docontrol.io
   tags:
   - SaaS Security
   properties:
   - type: Documentation
     url: https://docs.docontrol.io/
+  - type: APIReference
+    url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
+  - type: MCPServer
+    url: mcp/docontrol-mcp.yml
 - aid: docontrol:docontrol-authentication-api
   name: DoControl Authentication API
   description: The Authentication API from DoControl — 1 operation(s) for authentication.
-  humanURL: https://www.docontrol.io
+  humanURL: https://docs.docontrol.io/docontrol-user-guide/system-management/api
+  baseURL: https://auth.prod.docontrol.io
   tags:
   - Authentication
   properties:
   - type: OpenAPI
     url: openapi/docontrol-authentication-api-openapi.yml
+  - type: Overlay
+    url: overlays/docontrol-authentication-api-overlay.yaml
+  - type: APIReference
+    url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
 - aid: docontrol:docontrol-graphql-api
   name: DoControl GraphQL API
   description: The GraphQL API from DoControl — 1 operation(s) for graphql.
-  humanURL: https://www.docontrol.io
+  humanURL: https://docs.docontrol.io/docontrol-user-guide/system-management/api
+  baseURL: https://apollo-gateway-v4-api.prod.docontrol.io
   tags:
   - GraphQL
   properties:
   - type: OpenAPI
     url: openapi/docontrol-graphql-api-openapi.yml
+  - type: Overlay
+    url: overlays/docontrol-graphql-api-overlay.yaml
+  - type: MCPServer
+    url: mcp/docontrol-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/docontrol-tool-crosswalk.yml
+  - type: DataModel
+    url: data-model/docontrol-data-model.yml
+  - type: APIReference
+    url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
 common:
   - type: AgenticAccess
     url: agentic-access/docontrol-agentic-access.yml
@@ -86,6 +121,56 @@ common:
     url: https://docs.docontrol.io/
   - type: Integrations
     url: https://www.docontrol.io/integrations
+  - type: MCPServer
+    url: mcp/docontrol-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/docontrol-tool-crosswalk.yml
+  - type: LLMsTxt
+    url: llms/docontrol-llms.txt
+  - type: Packages
+    url: packages/docontrol-packages.yml
+  - type: Conventions
+    url: conventions/docontrol-conventions.yml
+  - type: Conformance
+    url: conformance/docontrol-conformance.yml
+  - type: Compliance
+    url: security/docontrol-trust-center.yml
+  - type: ErrorCatalog
+    url: errors/docontrol-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/docontrol-lifecycle.yml
+  - type: StatusPage
+    url: https://status.docontrol.io
+  - type: ChangeLog
+    url: changelog/docontrol-changelog.yml
+  - type: DataModel
+    url: data-model/docontrol-data-model.yml
+  - type: Webhooks
+    url: webhooks/docontrol-webhooks.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Plans
+    url: plans/docontrol-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/docontrol-rate-limits.yml
+  - type: Security
+    url: security/docontrol-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/docontrol-vulnerability-disclosure.yml
+  - type: APIReference
+    url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
+  - type: GettingStarted
+    url: https://docs.docontrol.io/docontrol-user-guide/getting-started/quick-start
+  - type: Support
+    url: https://www.docontrol.io/support
+  - type: Blog
+    url: https://www.docontrol.io/blog
+  - type: TermsOfService
+    url: https://www.docontrol.io/legal/terms-of-use
+  - type: PrivacyPolicy
+    url: https://www.docontrol.io/legal/privacy
+  - type: Login
+    url: https://app.docontrol.io
 integrations:
   - name: 'Google''s'
   - name: 'Microsoft 365''s'
@@ -105,3 +190,9 @@ integrations:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+
+x-enrichment:
+  date: '2026-09-06'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v3

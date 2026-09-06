@@ -1,0 +1,88 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://status.docontrol.io (and its Statuspage API at /api/v2/summary.json),
+  https://docs.docontrol.io/docontrol-user-guide/system-management/api.md,
+  https://github.com/docontrol-io/dc-mcp-server/releases — probed 2026-09-06.
+provider: DoControl
+providerId: docontrol
+description: >-
+  Lifecycle posture for the DoControl API surface. DoControl runs a real, public, component-level
+  status page and versions its gateway in the hostname, but publishes no deprecation policy, no
+  sunset headers, no SLA and no API changelog.
+versioning:
+  scheme: host-embedded
+  current: v4
+  evidence: >-
+    The GraphQL gateway host is apollo-gateway-v4-api.prod.docontrol.io and the OpenAPI records
+    info.version 4.0. The Apollo graph reference DoControl's own MCP server defaults to is
+    `docontrol-api@current`, i.e. the floating current variant.
+  policy_published: false
+  note: >-
+    There is no published version-support policy, no list of supported versions, and no statement
+    of what happens to v3 or what v5 would mean for a consumer. A schema change lands on
+    `@current` with no announced notice period.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  evidence: >-
+    Neither OpenAPI document marks any operation `deprecated`, no Sunset or Deprecation response
+    header was observed, and no deprecation or end-of-life page exists in the documentation index
+    (llms/docontrol-llms.txt, 392 entries, contains no deprecation, sunset, changelog or
+    release-notes page).
+sla:
+  published: false
+  evidence: >-
+    No public SLA document. Uptime commitments, if any, are contractual — DoControl publishes no
+    pricing or plan page either (see plans/docontrol-plans-pricing.yml).
+status_page:
+  url: https://status.docontrol.io
+  provider: Atlassian Statuspage
+  machine_readable: https://status.docontrol.io/api/v2/summary.json
+  status: 200
+  observed: '2026-09-06'
+  overall_indicator: none
+  overall_description: All Systems Operational
+  components_tracked:
+  - Graphql Api
+  - Backend API
+  - Management portal
+  - Integrations
+  - Box
+  - Dropbox
+  - Google Apps Drive
+  - Google Apps Docs
+  - Google Apps Sheets
+  - Google Apps Slides
+  - Google Workspace
+  - Jira
+  - Okta
+  - Salesforce
+  - Slack
+  - Slack Apps/Integrations/APIs
+  - Slack Workspace/Org Administration
+  - Zoom
+  note: >-
+    The API itself is a tracked component ("Graphql Api"), not just the marketing site — that is
+    the useful distinction for a consumer, and DoControl gets it right.
+credential_lifecycle:
+  refresh_token_validity: 10 years
+  access_token_validity: 5 minutes
+  max_keys_per_tenant: 10
+  revocation: >-
+    Keys are deleted from Settings > Admin > API keys; the refresh token is displayed once at
+    creation and is unrecoverable afterwards.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+  note: >-
+    A 10-year refresh token with no published rotation guidance is the sharpest lifecycle risk on
+    this surface — it long outlives the employee who minted it.
+tooling_releases:
+  repository: https://github.com/docontrol-io/dc-mcp-server
+  latest: v1.0.9
+  released: '2025-11-05'
+  note: >-
+    The MCP server is the only DoControl component with a dated public release stream. See
+    changelog/docontrol-changelog.yml.

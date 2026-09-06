@@ -1,0 +1,59 @@
+overlay: 1.0.0
+info:
+  title: DoControl GraphQL API — API Evangelist enhancements
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-06'
+  method: generated
+  source: >-
+    Enhancements derived from DoControl's own documentation
+    (https://docs.docontrol.io/docontrol-user-guide/system-management/api.md and the
+    DoControl API action pages under /workflows/), plus live probes of
+    https://apollo-gateway-v4-api.prod.docontrol.io/graphql on 2026-09-06.
+  extends: openapi/docontrol-graphql-api-openapi.yml
+  note: The base spec is left untouched.
+actions:
+- target: $.info
+  description: Record the documentation, MCP and support surface on the spec itself.
+  update:
+    contact:
+      name: DoControl Support
+      url: https://www.docontrol.io/support
+    x-documentation: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+    x-status-page: https://status.docontrol.io
+    x-mcp-server: https://github.com/docontrol-io/dc-mcp-server
+    x-graphql-schema: introspection-only, requires an authenticated tenant access token
+- target: $.paths['/graphql'].post
+  description: >-
+    Record the documented request constraints, the GraphQL error convention, and the observed
+    unauthenticated response — none of which the base spec carries.
+  update:
+    x-request-constraints:
+      max_payload: 5MB
+      timeout_seconds: 30
+      operations_per_request: 1
+      pagination_supported: false
+      source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+    x-error-convention:
+      style: graphql
+      description: >-
+        A GraphQL API returns 200 OK even on error. Errors arrive in the `errors` array with
+        `message`, `locations` and `path`; 5xx means the server itself is unavailable.
+      source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+    x-observed-errors:
+    - status: 401
+      body: MISSING ACCESS_TOKEN
+      content_type: text/html
+      condition: no Authorization header
+      observed: '2026-09-06'
+    x-permission-required: admin
+    x-documented-operations:
+    - hrisUsers
+    - startGoogleRemediationAssessment
+    - googleRemediationAssessment
+- target: $.paths['/graphql'].post.responses['200']
+  description: Note that a 200 can carry an error payload, so status alone is not a success signal.
+  update:
+    x-success-is-not-status: >-
+      A 200 with a non-empty `errors` array is a failed operation. Agents must inspect the body,
+      not the status code.

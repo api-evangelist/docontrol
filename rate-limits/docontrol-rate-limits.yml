@@ -3,87 +3,83 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: DoControl
 providerId: docontrol
+generated: '2026-09-06'
+modified: '2026-09-06'
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+method: searched
+source: >-
+  https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md,
+  https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md,
+  https://docs.docontrol.io/docontrol-user-guide/system-management/api.md — plus live
+  unauthenticated probes of https://auth.prod.docontrol.io/refresh and
+  https://apollo-gateway-v4-api.prod.docontrol.io/graphql on 2026-09-06.
 tags:
-  - Data Security
-  - SaaS Security
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the DoControl API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+- Data Security
+- SaaS Security
+- Rate Limiting
+- Quotas
+description: >-
+  DoControl publishes NO request-rate limit — no requests-per-second, per-minute or per-month
+  figure for any tier — and returns no rate-limit headers. What it does publish is a set of
+  per-request and per-tenant ceilings, recorded below. This file REPLACES a generated 2026-05-04
+  scaffold that invented 10/100/1000 rpm tiers and X-RateLimit-* headers; DoControl publishes
+  neither, and the headers were not present on any observed response.
+rate_limit_documented: false
+rate_limit_count: 0
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  published: []
+  observed: []
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appeared on the 401 from the GraphQL
+    gateway or the 400 from the token exchange. A client has no runtime signal of remaining
+    budget, and no documented backoff target.
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+  throttled: null
+  quotaExceeded: null
+  note: >-
+    No throttling status code is documented. Because the API is GraphQL and returns 200 on
+    application errors, a throttle — if one exists — may well surface inside the errors array
+    rather than as a 429.
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - DoControl
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - DoControl
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - DoControl
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - DoControl
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - DoControl
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+- name: Maximum request payload
+  scope: per-request
+  metric: payload_bytes
+  limit: 5MB
+  applies_to: DoControl API workflow action step
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+- name: Request timeout
+  scope: per-request
+  metric: seconds
+  limit: 30
+  applies_to: DoControl API workflow action step
+  note: Stated as "in case of no response, there's a 30 second timeout".
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+- name: Operations per request
+  scope: per-request
+  metric: operations
+  limit: 1
+  applies_to: DoControl API workflow action step
+  note: One query or mutation at a time; no batching.
+  source: https://docs.docontrol.io/docontrol-user-guide/workflows/define-workflow-settings/action-settings/utilities/docontrol-api-action.md
+- name: API keys per tenant
+  scope: per-account
+  metric: api_keys
+  limit: 10
+  applies_to: DoControl tenant
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/settings/api-keys.md
+- name: Access-token lifetime
+  scope: per-credential
+  metric: seconds
+  limit: 300
+  applies_to: bearer access token
+  note: >-
+    Not a rate limit, but it functions as one for a long-running agent: any session longer than
+    five minutes must re-exchange the refresh token mid-flight.
+  source: https://docs.docontrol.io/docontrol-user-guide/system-management/api.md
+pagination_note: >-
+  DoControl states that API pagination is not supported from the workflow action step, so a large
+  read cannot be split into smaller requests to stay under the 5MB ceiling. The payload cap is
+  therefore a hard ceiling on result size, not a paging hint.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
