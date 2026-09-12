@@ -1,0 +1,14 @@
+{
+  "repo": "docontrol",
+  "feeds": [
+    {
+      "source": "https://www.docontrol.io/support",
+      "feed_url": "https://www.docontrol.io/support",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-09-06T19:17:18Z"
+}
