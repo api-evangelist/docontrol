@@ -82,20 +82,16 @@ apis:
     url: overlays/docontrol-authentication-api-overlay.yaml
   - type: APIReference
     url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
-- aid: docontrol:docontrol-graphql-api
-  name: DoControl GraphQL API
-  description: The GraphQL API from DoControl — 1 operation(s) for graphql.
-  humanURL: https://docs.docontrol.io/docontrol-user-guide/system-management/api
+- aid: docontrol:docontrol-graph-ql-api
+  name: DoControl Graph QL API
+  description: The Graph QL API from DoControl — 1 operation(s) for graph ql.
+  humanURL: https://www.docontrol.io
   baseURL: https://apollo-gateway-v4-api.prod.docontrol.io
   tags:
-  - GraphQL
+  - Graph QL
   properties:
   - type: OpenAPI
-    url: openapi/docontrol-graphql-api-openapi.yml
-  - type: Overlay
-    url: overlays/docontrol-graphql-api-overlay.yaml
-  - type: MCPServer
-    url: mcp/docontrol-mcp.yml
+    url: openapi/docontrol-graph-ql-api-openapi.yml
   - type: ToolCrosswalk
     url: mcp/docontrol-tool-crosswalk.yml
   - type: DataModel
@@ -103,6 +99,8 @@ apis:
   - type: APIReference
     url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
 common:
+  - type: Overlay
+    url: overlays/docontrol-graphql-api-overlay.yaml
   - type: AgenticAccess
     url: agentic-access/docontrol-agentic-access.yml
   - type: TrustCenter
