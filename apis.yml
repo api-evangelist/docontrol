@@ -88,6 +88,8 @@ apis:
   humanURL: https://www.docontrol.io
   baseURL: https://apollo-gateway-v4-api.prod.docontrol.io
   tags:
+  - GraphQL
+  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
