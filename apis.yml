@@ -37,6 +37,9 @@ accessModel:
   generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/docontrol.png
+x-docs-platform: gitbook
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-09-25
 tags:
   - Data Security
   - SaaS Security
@@ -88,8 +91,6 @@ apis:
   humanURL: https://www.docontrol.io
   baseURL: https://apollo-gateway-v4-api.prod.docontrol.io
   tags:
-  - GraphQL
-  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
