@@ -102,6 +102,8 @@ apis:
   - type: APIReference
     url: https://docs.docontrol.io/docontrol-user-guide/system-management/api
 common:
+  - type: FinOps
+    url: finops/docontrol-finops.yml
   - type: Overlay
     url: overlays/docontrol-graphql-api-overlay.yaml
   - type: AgenticAccess
