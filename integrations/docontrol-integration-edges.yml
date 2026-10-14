@@ -1,7 +1,10 @@
 generated: '2026-10-14'
 method: searched
 checked:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
+- datadog/integrations/datadog-integration-edges.yml
 - https://github.com/marketplace?type=apps
+- okta/integrations/okta-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: GitHub Marketplace (apps)
@@ -21,5 +24,60 @@ edges:
   - Verified domain
   detected_by: sweep-devtools.py
   detected: '2026-10-14'
+- partner_name: CrowdStrike (own)
+  partner: crowdstrike
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.crowdstrike.com/listings/docontrol-automated-saas-security/
+  mirror_of: crowdstrike/integrations/crowdstrike-integration-edges.yml
+  apps:
+  - DoControl Automated SaaS Security
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+- partner_name: Datadog (own)
+  partner: datadog
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://github.com/DataDog/integrations-extras/tree/master/docontrol
+  mirror_of: datadog/integrations/datadog-integration-edges.yml
+  apps:
+  - DoControl
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Automation
+- partner_name: Okta (own)
+  partner: okta
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.okta.com/integrations/docontrol/
+  mirror_of: okta/integrations/okta-integration-edges.yml
+  apps:
+  - DoControl
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Single Sign-On
+  badges:
+  - OKTA_VERIFIED
+  features:
+  - BOOKMARK_SOM
+  - SAML
 source:
 - https://github.com/marketplace?type=apps
