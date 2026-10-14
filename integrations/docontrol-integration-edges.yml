@@ -1,0 +1,25 @@
+generated: '2026-10-14'
+method: searched
+checked:
+- https://github.com/marketplace?type=apps
+marketplace_apps: []
+edges:
+- partner_name: GitHub Marketplace (apps)
+  partner: github
+  partner_match: aggregator
+  type: marketplace
+  marketplace: github-apps
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://github.com/marketplace/docontrol-io
+  listing_count: 1
+  apps:
+  - DoControl.io
+  publisher_name: DoControl
+  badges:
+  - Verified domain
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+source:
+- https://github.com/marketplace?type=apps
