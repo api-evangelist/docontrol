@@ -53,3 +53,29 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: docontrol-slack-own
+  label: Slack (own)
+  partner: slack
+  partner_name: Slack (own)
+  category: Slack app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://slack.com/marketplace/A015LC4TT6V-docontrol
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: docontrol-zoom-own
+  label: Zoom (own)
+  partner: zoom
+  partner_name: Zoom (own)
+  category: Zoom app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.zoom.us/apps/8iX-0t3dSHWPuuahgLz6pw
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

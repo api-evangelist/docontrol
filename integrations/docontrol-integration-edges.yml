@@ -5,6 +5,8 @@ checked:
 - datadog/integrations/datadog-integration-edges.yml
 - https://github.com/marketplace?type=apps
 - okta/integrations/okta-integration-edges.yml
+- slack/integrations/slack-integration-edges.yml
+- zoom/integrations/zoom-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: GitHub Marketplace (apps)
@@ -79,5 +81,39 @@ edges:
   features:
   - BOOKMARK_SOM
   - SAML
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A015LC4TT6V-docontrol
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - DoControl
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
+- partner_name: Zoom (own)
+  partner: zoom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.zoom.us/apps/8iX-0t3dSHWPuuahgLz6pw
+  mirror_of: zoom/integrations/zoom-integration-edges.yml
+  apps:
+  - DoControl
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Zoom app
 source:
 - https://github.com/marketplace?type=apps
