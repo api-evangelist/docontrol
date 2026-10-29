@@ -1,4 +1,4 @@
-# DoControl (docontrol)
+# DoControl
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,51 +64,144 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
+DoControl is a SaaS data security platform providing automated data access governance, data loss prevention, insider risk management, shadow-app discovery and misconfiguration management across connected cloud applications including Google Workspace, Microsoft 365, Salesforce, Slack, Box, Dropbox, Zoom, Jira and GitHub. Its public programmable surface is a single Apollo GraphQL gateway at apollo-gateway-v4-api.prod.docontrol.io, reached with a five-minute bearer token exchanged from a console-issued API key at auth.prod.docontrol.io, and DoControl ships a first-party MCP server (dc-mcp-server) that exposes that graph to agents over stdio. Spin.AI announced its acquisition of DoControl on 2026-09-01, stating that the DoControl product, site, contracts and support are unchanged and that the brands operate independently.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/docontrol/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/docontrol/refs/heads/main/apis.yml)
+**Areas:** Data Security · SaaS Security · Data Access Governance · Data Loss Prevention · Insider Risk Management · SSPM · GraphQL · MCP
 
-## Scope
+## DoControl on APIs.io
 
-- **Type:** Index
+Everything profiled for DoControl is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/docontrol/](https://apis.io/providers/docontrol/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (3)
 
-- Data Security
-- SaaS Security
+- [DoControl](https://apis.io/apis/docontrol/docontrol/) — DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
+- [DoControl Authentication API](https://apis.io/apis/docontrol/docontrol-authentication-api/) — The Authentication API from DoControl — 1 operation(s) for authentication.
+- [DoControl Graph QL API](https://apis.io/apis/docontrol/docontrol-graph-ql-api/) — The Graph QL API from DoControl — 1 operation(s) for graph ql.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-27
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-### DoControl
+Model Context Protocol servers that expose the API to agents.
 
-DoControl is a SaaS data security platform providing automated data access governance, DLP, and insider threat prevention for cloud applications.
+- [DoControl MCP Server](https://apis.io/servers/docontrol/docontrol-mcp-server/)
 
-- **Human URL:** [https://www.docontrol.io](https://www.docontrol.io)
+#### Agentic access (1)
 
-#### Tags
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- SaaS Security
+- [Docontrol Agentic Access](https://apis.io/agentic-access/docontrol/docontrol-agentic-access/)
 
-#### Properties
+#### Collections (3)
 
-- [Documentation](https://docs.docontrol.io/)
-- [Postman Collection](collections/docontrol.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/docontrol.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Postman and Open Collection request collections.
 
-## Common Properties
+- [DoControl API](https://apis.io/collections/docontrol/open-docontrol/)
+- [DoControl Authentication API](https://apis.io/collections/docontrol/open-docontrol-authentication-api/)
+- [DoControl Authentication GraphQL API](https://apis.io/collections/docontrol/open-docontrol-graphql-api/)
 
-- [GitHub Organization](https://github.com/docontrol-io)
-- [LinkedIn](https://www.linkedin.com/company/do-control)
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Docontrol Authentication Api Overlay](https://apis.io/overlays/docontrol/docontrol-authentication-api-overlay/)
+- [Docontrol Graphql Api Overlay](https://apis.io/overlays/docontrol/docontrol-graphql-api-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Docontrol Authentication](https://apis.io/security/docontrol/docontrol-authentication/)
+- [Docontrol Domain Security](https://apis.io/security/docontrol/docontrol-domain-security/)
+- [Docontrol Trust Center](https://apis.io/security/docontrol/docontrol-trust-center/)
+- [Docontrol Vulnerability Disclosure](https://apis.io/security/docontrol/docontrol-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Docontrol Plans Pricing](https://apis.io/plans/docontrol/docontrol-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Docontrol Rate Limits](https://apis.io/rate-limits/docontrol/docontrol-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Docontrol Finops](https://apis.io/finops/docontrol/docontrol-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.docontrol.io)
 - [Documentation](https://docs.docontrol.io/)
-- [Integrations](https://www.docontrol.io/integrations)
+- [Getting started](https://docs.docontrol.io/docontrol-user-guide/getting-started/quick-start)
+- [API reference](https://docs.docontrol.io/docontrol-user-guide/system-management/api)
+- [Support](https://www.docontrol.io/support)
+- [Blog](https://www.docontrol.io/blog)
+- [Terms of service](https://www.docontrol.io/legal/terms-of-use)
+- [Privacy policy](https://www.docontrol.io/legal/privacy)
+- [GitHub](https://github.com/docontrol-io)
+- [Status](https://status.docontrol.io)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 51.0** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.7 |
+| Contract quality | 45.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 84.2 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 43.4 |
+
+**Agent readiness 33.8** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | unknown |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 35.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/docontrol/](https://apis.io/providers/docontrol/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for DoControl: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/docontrol/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
