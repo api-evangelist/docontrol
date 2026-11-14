@@ -5,9 +5,18 @@ artifacts:
   agentic-access/docontrol-agentic-access.yml:
     method: generated
     evidence: declared in the artifact
+  ai-preferences/docontrol-ai-preferences.yml:
+    method: harvested
+    evidence: declared in the artifact
   authentication/docontrol-authentication.yml:
     method: searched
     evidence: declared in the artifact
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/docontrol-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -29,14 +38,23 @@ artifacts:
   collections/docontrol.postman_collection.json:
     method: derived
     evidence: openapi/docontrol
+  compliance/docontrol-compliance.yml:
+    method: harvested
+    evidence: declared in the artifact
   conformance/docontrol-conformance.yml:
     method: derived
     evidence: declared in the artifact
   conventions/docontrol-conventions.yml:
     method: searched
     evidence: declared in the artifact
+  data-license/docontrol-data-license.yml:
+    method: harvested
+    evidence: declared in the artifact
   data-model/docontrol-data-model.yml:
     method: searched
+    evidence: declared in the artifact
+  eligibility/docontrol-eligibility.yml:
+    method: harvested
     evidence: declared in the artifact
   errors/docontrol-problem-types.yml:
     method: searched
@@ -53,6 +71,9 @@ artifacts:
   heartbeat/2026-11-06.yml:
     method: unknown
     evidence: no authorship recorded
+  heartbeat/2026-11-13.yml:
+    method: unknown
+    evidence: no authorship recorded
   integrations/_index.yml:
     method: generated
     evidence: carries an API Evangelist house phrase
@@ -62,7 +83,7 @@ artifacts:
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -128,6 +149,9 @@ artifacts:
   kin/score-2026-11-02T082323.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/docontrol-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
@@ -165,6 +189,9 @@ artifacts:
   plans/docontrol-plans-pricing.yml:
     method: searched
     evidence: declared in the artifact
+  privacy/docontrol-privacy-policy.yml:
+    method: harvested
+    evidence: declared in the artifact
   rate-limits/docontrol-rate-limits.yml:
     method: searched
     evidence: declared in the artifact
@@ -191,6 +218,9 @@ artifacts:
     evidence: declared in the artifact
   skills/docontrol-scheduled-drive-remediation.md:
     method: generated
+    evidence: declared in the artifact
+  terms/docontrol-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   webhooks/docontrol-webhooks.yml:
     method: searched
